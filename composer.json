@@ -1,12 +1,12 @@
 {
-    "name" : "webservco/project-skeleton",
-    "type" : "project",
-    "description" : "A simple webservco/framework Project Skeleton.",
+    "name" : "webservco/icarsoft",
+    "type" : "library",
+    "description" : "Utilities for processing iCarsoft car diagnostic tool log files data.",
     "keywords" : [
-        "framework",
+        "icarsoft",
         "webservco"
     ],
-    "homepage" : "https://webserv.co/",
+    "homepage" : "https://github.com/webservco/icarsoft",
     "license" : "MIT",
     "authors" : [
         {
@@ -15,8 +15,11 @@
         }
     ],
     "require" : {
-        "php" : "^5.4 || ^7.0",
+        "php" : "^5.4 || ^7.1",
         "webservco/framework" : "@dev"
+    },
+    "require-dev" : {
+        "phpunit/phpunit" : "~4|~5"
     },
     "suggest" : {
         "pds/skeleton" : "A standard filesystem skeleton suitable for all PHP packages.",
@@ -25,16 +28,17 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Project\\" : "src/"
+            "WebServCo\\" : "src/WebServCo/",
+            "Tests\\" : "tests/unit/WebServCo/"
         }
     },
     "scripts" : {
         "test" : "vendor/bin/phpunit --colors=always",
         "test:d" : "vendor/bin/phpunit --testdox",
         "check:structure" : "pds-skeleton validate .",
-        "check" : "phpcs --standard=PSR2 --extensions=php config public src",
-        "s:7": "phpstan analyse src --level=7 --ansi",
+        "check" : "phpcs --standard=PSR2 --extensions=php config public src tests",
+        "s:7": "phpstan analyse src tests --level=7 --ansi",
         "all": "clear && composer s:7 && composer check",
-        "check:devel": "grep -rnF 'XXX' config public resources src"
+        "check:devel": "grep -rnF 'XXX' config public resources src tests"
     }
 }
