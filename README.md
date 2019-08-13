@@ -41,3 +41,7 @@ try {
 ```
 
 ---
+
+## Notes
+
+Some log keys have duplicate names.
