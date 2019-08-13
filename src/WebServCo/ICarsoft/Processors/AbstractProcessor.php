@@ -35,7 +35,7 @@ abstract class AbstractProcessor
         /* process data*/
 
         $this->processHeader();
-        $this->processTitle();
+        $this->processTitleAndInfo();
         $this->processContent();
     }
 }

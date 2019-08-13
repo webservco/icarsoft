@@ -29,7 +29,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
             $key = $this->filterKey($parts[0]);
             $value = isset($parts[1]) ? $parts[1] : null;
 
-            $this->content[$key] = $this->filterValue($parts[1]);
+            $this->content[$key] = $this->filterValue($value);
         }
     }
 }

@@ -31,7 +31,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
     protected function processContent()
     {
         if (!is_array($this->frameData)) { // fault, data
-                throw new ProcessorException('Error procesisng frames');
+                throw new ProcessorException('Error processing frames');
         }
         foreach ($this->frameData as $frame) {
             $this->frames[] = $this->processFrame($frame);
@@ -56,7 +56,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
                 $valueParts = preg_split('/(?<=[0-9.])(?=[^0-9.]+)/i', (string) $value, 2);
             }
 
-            $frame[$key] = [
+            $frame[$key][] = [
                 'value' => $this->filterValue($valueParts[0]),
                 'units' => !empty($valueParts[1]) ? $this->filterValue($valueParts[1]) : null,
             ];

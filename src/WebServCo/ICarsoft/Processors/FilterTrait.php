@@ -13,6 +13,11 @@ trait FilterTrait
         return trim($data);
     }
 
+    protected function filterTitleValue($data)
+    {
+        return trim($data, " \t\n\r\0\x0B:");
+    }
+
     protected function filterSectionData($data)
     {
         return trim($data, " \t\n\r\0\x0B:");

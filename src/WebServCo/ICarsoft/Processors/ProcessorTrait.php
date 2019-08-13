@@ -58,10 +58,14 @@ trait ProcessorTrait
         return true;
     }
 
-    protected function processTitle()
+    protected function processTitleAndInfo()
     {
         $titleLines = explode(Delimiter::TITLE_SECTION, $this->titleData, 2);
-        $this->title = explode(Delimiter::TITLE_DATA, $titleLines[0]);
+        $titleItems = explode(Delimiter::TITLE_DATA, $titleLines[0]);
+        foreach ($titleItems as $k => $v) {
+            $this->title[$k] = $this->filterTitleValue($v);
+        }
+        /* Info */
         if (!empty($titleLines[1])) {
             $infoItems = explode(Delimiter::INFO_ITEMS, $titleLines[1]);
             foreach ($infoItems as $item) {
