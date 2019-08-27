@@ -6,6 +6,7 @@ use WebServCo\ICarsoft\Exceptions\ProcessorException;
 
 trait ProcessorTrait
 {
+    protected $fileData;
     protected $headerData;
     protected $bodyData;
 
@@ -13,6 +14,17 @@ trait ProcessorTrait
     protected $infoData;
     protected $contentData;
     protected $frameData;
+
+    protected $title;
+    protected $info;
+
+    abstract protected function filterKey($data);
+
+    abstract protected function filterValue($data);
+
+    abstract protected function filterTitleValue($data);
+
+    abstract protected function filterSectionData($data);
 
     protected function getLines($data)
     {
