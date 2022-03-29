@@ -38,7 +38,7 @@
         "check:structure" : "pds-skeleton validate .",
         "check" : "phpcs --standard=PSR2 --extensions=php config public src tests",
         "s:5": "phpstan analyse src tests --level=5 --ansi",
-        "all": "clear && composer s:5 && composer check",
+        "all": "composer s:5 && composer check",
         "check:devel": "grep -rnF 'XXX' config public resources src tests"
     }
 }
