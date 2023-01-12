@@ -1,17 +1,24 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft\Processors;
 
 use RuntimeException;
 
+use function file_get_contents;
+use function is_readable;
+
 abstract class AbstractProcessor
 {
-    protected string $fileData;
-
     use FilterTrait;
     use GetTrait;
     use ProcessorTrait;
 
+    protected string $fileData;
+
     abstract protected function processBodyParts(): bool;
+
     abstract protected function processContent(): bool;
 
     public function __construct(string $filePath)
@@ -27,7 +34,7 @@ abstract class AbstractProcessor
         $this->frames = [];
     }
 
-    public function run()
+    public function run(): void
     {
         /* process file */
 

@@ -1,5 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft\Processors;
+
+use function trim;
 
 trait FilterTrait
 {

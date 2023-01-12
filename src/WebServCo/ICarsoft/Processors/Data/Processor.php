@@ -1,11 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft\Processors\Data;
 
-use OutOfBoundsException;
 use WebServCo\ICarsoft\Delimiter;
 use WebServCo\ICarsoft\Exceptions\ProcessorException;
+use WebServCo\ICarsoft\Processors\AbstractProcessor;
 
-final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
+use function array_key_exists;
+use function explode;
+use function is_array;
+use function mb_strpos;
+use function preg_split;
+
+final class Processor extends AbstractProcessor
 {
     /*
     * Process body with frames.
@@ -27,17 +36,20 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
             }
             $i++;
         }
+
         return true;
     }
 
     protected function processContent(): bool
     {
-        if (!is_array($this->frameData)) { // fault, data
+        // fault, data
+        if (!is_array($this->frameData)) {
                 throw new ProcessorException('Error processing frames');
         }
         foreach ($this->frameData as $frame) {
             $this->frames[] = $this->processFrame($frame);
         }
+
         return true;
     }
 
@@ -52,7 +64,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
             $parts = $this->getSectionParts($line, Delimiter::FRAME_DATA);
 
             $key = $this->filterKey($parts[0]);
-            $value = isset($parts[1]) ? $parts[1] : null;
+            $value = $parts[1] ?? null;
 
             if (mb_strpos($key, 'Frame', 0) === 0) {
                 $keyParts = explode(' ', $key);
@@ -67,6 +79,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
                 'units' => !empty($valueParts[1]) ? $this->filterValue($valueParts[1]) : null,
             ];
         }
+
         return $frame;
     }
 }

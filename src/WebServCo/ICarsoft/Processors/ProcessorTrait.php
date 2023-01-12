@@ -1,9 +1,15 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft\Processors;
 
 use OutOfBoundsException;
 use UnexpectedValueException;
 use WebServCo\ICarsoft\Delimiter;
+
+use function array_key_exists;
+use function explode;
 
 trait ProcessorTrait
 {
@@ -27,7 +33,7 @@ trait ProcessorTrait
     /**
      * @var array<string,string>
      */
-    protected array$info = [];
+    protected array $info = [];
 
     abstract protected function filterKey(string $data): string;
 
@@ -46,6 +52,7 @@ trait ProcessorTrait
         if ($lines === []) {
             throw new OutOfBoundsException('Error processing frame lines');
         }
+
         return $lines;
     }
 
@@ -66,6 +73,7 @@ trait ProcessorTrait
         }
         $this->headerData = $this->filterSectionData($fileParts[0]);
         $this->bodyData = $this->filterSectionData($fileParts[1]);
+
         return true;
     }
 
@@ -82,9 +90,10 @@ trait ProcessorTrait
 
         foreach ($lines as $line) {
             $parts = explode(Delimiter::HEADER_DATA, $this->filterSectionData($line));
-            $value = isset($parts[1]) ? $parts[1] : null;
+            $value = $parts[1] ?? null;
             $this->header[$this->filterKey($parts[0])] = $this->filterValue($value);
         }
+
         return true;
     }
 
@@ -106,6 +115,7 @@ trait ProcessorTrait
                 $this->info[$this->filterKey($parts[0])] = $this->filterValue($parts[1]);
             }
         }
+
         return true;
     }
 }

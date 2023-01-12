@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft;
 
 final class Delimiter
@@ -16,7 +19,7 @@ final class Delimiter
 
     public const CONTENT_DATA = ':';
 
-    public const FRAME_SECTION = '- - - - - - - - - - - - - - - - - - - - - - -'.
+    public const FRAME_SECTION = '- - - - - - - - - - - - - - - - - - - - - - -' .
     ' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -';
     public const FRAME_DATA = '-----';
 }

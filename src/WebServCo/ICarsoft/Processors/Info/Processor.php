@@ -1,10 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace WebServCo\ICarsoft\Processors\Info;
 
 use OutOfBoundsException;
 use WebServCo\ICarsoft\Delimiter;
+use WebServCo\ICarsoft\Processors\AbstractProcessor;
 
-final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
+use function array_key_exists;
+use function explode;
+
+final class Processor extends AbstractProcessor
 {
     /*
     * Body with no frames
@@ -18,6 +25,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
         }
         $this->titleData = $this->filterSectionData($bodyParts[0]);
         $this->contentData = $this->filterSectionData($bodyParts[1]);
+
         return true;
     }
 
@@ -28,10 +36,11 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
             $parts = $this->getSectionParts($line, Delimiter::INFO_DATA);
 
             $key = $this->filterKey($parts[0]);
-            $value = isset($parts[1]) ? $parts[1] : null;
+            $value = $parts[1] ?? null;
 
             $this->content[$key] = $this->filterValue($value);
         }
+
         return true;
     }
 }
