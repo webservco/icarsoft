@@ -16,9 +16,7 @@ try {
     print_r($processor->getTitle());
     print_r($processor->getInfo());
     print_r($processor->getFrames());
-} catch (\WebServCo\ICarsoft\Exceptions\ProcessorException $e) {
-    echo $e->getMessage();
-} catch (\WebServCo\ICarsoft\Exceptions\ICarsoftException $e) {
+} catch (\Throwable$e) {
     echo $e->getMessage();
 }
 ```
@@ -33,9 +31,7 @@ try {
     print_r($processor->getTitle());
     print_r($processor->getInfo());
     print_r($processor->getContent());
-} catch (\WebServCo\ICarsoft\Exceptions\ProcessorException $e) {
-    echo $e->getMessage();
-} catch (\WebServCo\ICarsoft\Exceptions\ICarsoftException $e) {
+} catch (\Throwable $e) {
     echo $e->getMessage();
 }
 ```
