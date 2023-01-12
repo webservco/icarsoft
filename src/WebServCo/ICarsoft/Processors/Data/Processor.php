@@ -48,7 +48,7 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
             $key = $this->filterKey($parts[0]);
             $value = isset($parts[1]) ? $parts[1] : null;
 
-            if (\WebServCo\Framework\Utils\Strings::startsWith($key, 'Frame ', false)) {
+            if (mb_strpos($key, 'Frame', 0) === 0) {
                 $keyParts = explode(' ', $key);
                 $key = $keyParts[0];
                 $valueParts = [$keyParts[1]];
