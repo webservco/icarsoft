@@ -1,65 +1,83 @@
 <?php
 namespace WebServCo\ICarsoft\Processors;
 
+use OutOfBoundsException;
+use UnexpectedValueException;
 use WebServCo\ICarsoft\Delimiter;
-use WebServCo\ICarsoft\Exceptions\ProcessorException;
 
 trait ProcessorTrait
 {
-    protected $fileData;
-    protected $headerData;
-    protected $bodyData;
+    protected ?string $fileData = null;
+    protected ?string $headerData = null;
+    protected ?string $bodyData = null;
 
-    protected $titleData;
-    protected $infoData;
-    protected $contentData;
-    protected $frameData;
+    protected ?string $titleData = null;
+    protected ?string $contentData = null;
 
-    protected $title;
-    protected $info;
+    /**
+     * @var array<int,string>
+     */
+    protected array $frameData;
 
-    abstract protected function filterKey($data);
+    /**
+     * @var array<string,string>
+     */
+    protected array $title = [];
 
-    abstract protected function filterValue($data);
+    /**
+     * @var array<string,string>
+     */
+    protected array$info = [];
 
-    abstract protected function filterTitleValue($data);
+    abstract protected function filterKey(string $data): string;
 
-    abstract protected function filterSectionData($data);
+    abstract protected function filterValue(string $data): string;
 
-    protected function getLines($data)
+    abstract protected function filterTitleValue(string $data): string;
+
+    abstract protected function filterSectionData(string $data): string;
+
+    /**
+     * @return array <int,string>
+     */
+    protected function getLines(string $data): array
     {
         $lines = explode(Delimiter::LINE, $data);
-        if (empty($lines)) {
-            throw new ProcessorException('Error processing frame lines');
+        if ($lines === []) {
+            throw new OutOfBoundsException('Error processing frame lines');
         }
         return $lines;
     }
 
-    protected function getSectionParts($data, $delimiter)
+    /**
+     * @return array <int,string>
+     */
+    protected function getSectionParts(string $data, string $delimiter): array
     {
         return explode($delimiter, $this->filterSectionData($data));
     }
 
-    protected function processFileParts()
+    protected function processFileParts(): bool
     {
         $fileParts = explode(Delimiter::HEADER_SECTION, $this->fileData);
-        if (empty($fileParts[1])) { // no body
-            throw new ProcessorException('Error processing header section');
+        if (!array_key_exists(1, $fileParts)) {
+            // no body
+            throw new OutOfBoundsException('Error processing header section');
         }
         $this->headerData = $this->filterSectionData($fileParts[0]);
         $this->bodyData = $this->filterSectionData($fileParts[1]);
         return true;
     }
 
-    protected function processHeader()
+    protected function processHeader(): bool
     {
         if (empty($this->headerData)) {
-            throw new ProcessorException('No header data');
+            throw new UnexpectedValueException('No header data');
         }
 
         $lines = explode(Delimiter::LINE, $this->headerData);
-        if (empty($lines)) {
-            throw new ProcessorException('Error processing header lines');
+        if ($lines === []) {
+            throw new UnexpectedValueException('Error processing header lines');
         }
 
         foreach ($lines as $line) {
@@ -70,7 +88,7 @@ trait ProcessorTrait
         return true;
     }
 
-    protected function processTitleAndInfo()
+    protected function processTitleAndInfo(): bool
     {
         $titleLines = explode(Delimiter::TITLE_SECTION, $this->titleData, 2);
         $titleItems = explode(Delimiter::TITLE_DATA, $titleLines[0]);
@@ -78,12 +96,12 @@ trait ProcessorTrait
             $this->title[$k] = $this->filterTitleValue($v);
         }
         /* Info */
-        if (!empty($titleLines[1])) {
+        if (array_key_exists(1, $titleLines)) {
             $infoItems = explode(Delimiter::INFO_ITEMS, $titleLines[1]);
             foreach ($infoItems as $item) {
                 $parts = explode(Delimiter::INFO_DATA, $item);
-                if (!isset($parts[1])) {
-                    throw new ProcessorException('Error processing info item');
+                if (!array_key_exists(1, $parts)) {
+                    throw new OutOfBoundsException('Error processing info item');
                 }
                 $this->info[$this->filterKey($parts[0])] = $this->filterValue($parts[1]);
             }

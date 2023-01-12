@@ -1,9 +1,9 @@
 <?php
 namespace WebServCo\ICarsoft\Processors;
 
-class Type
+final class Type
 {
-    const DATA = 'Data';
-    const FAULT = 'Fault';
-    const INFO = 'Info';
+    public const DATA = 'Data';
+    public const FAULT = 'Fault';
+    public const INFO = 'Info';
 }

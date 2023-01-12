@@ -1,26 +1,27 @@
 <?php
 namespace WebServCo\ICarsoft\Processors\Info;
 
+use OutOfBoundsException;
 use WebServCo\ICarsoft\Delimiter;
-use WebServCo\ICarsoft\Exceptions\ProcessorException;
 
 final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
 {
     /*
     * Body with no frames
     */
-    protected function processBodyParts()
+    protected function processBodyParts(): bool
     {
         $bodyParts = explode(Delimiter::TITLE_SECTION, $this->bodyData, 2);
-        if (empty($bodyParts[1])) { // no data
-            throw new ProcessorException('Error processing body section');
+        if (!array_key_exists(1, $bodyParts)) {
+            // No data.
+            throw new OutOfBoundsException('Error processing body section');
         }
         $this->titleData = $this->filterSectionData($bodyParts[0]);
         $this->contentData = $this->filterSectionData($bodyParts[1]);
         return true;
     }
 
-    protected function processContent()
+    protected function processContent(): bool
     {
         $lines = $this->getLines($this->contentData);
         foreach ($lines as $line) {
@@ -31,5 +32,6 @@ final class Processor extends \WebServCo\ICarsoft\Processors\AbstractProcessor
 
             $this->content[$key] = $this->filterValue($value);
         }
+        return true;
     }
 }

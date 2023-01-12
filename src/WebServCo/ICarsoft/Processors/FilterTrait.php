@@ -3,22 +3,22 @@ namespace WebServCo\ICarsoft\Processors;
 
 trait FilterTrait
 {
-    protected function filterKey($data)
+    protected function filterKey(string $data): string
     {
         return trim($data);
     }
 
-    protected function filterValue($data)
+    protected function filterValue(string $data): string
     {
         return trim($data);
     }
 
-    protected function filterTitleValue($data)
+    protected function filterTitleValue(string $data): string
     {
         return trim($data, " \t\n\r\0\x0B:");
     }
 
-    protected function filterSectionData($data)
+    protected function filterSectionData(string $data): string
     {
         return trim($data, " \t\n\r\0\x0B:");
     }

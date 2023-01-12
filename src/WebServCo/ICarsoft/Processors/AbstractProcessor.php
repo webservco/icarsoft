@@ -1,21 +1,23 @@
 <?php
 namespace WebServCo\ICarsoft\Processors;
 
+use RuntimeException;
+
 abstract class AbstractProcessor
 {
-    protected $fileData;
+    protected string $fileData;
 
     use FilterTrait;
     use GetTrait;
     use ProcessorTrait;
 
-    abstract protected function processBodyParts();
-    abstract protected function processContent();
+    abstract protected function processBodyParts(): bool;
+    abstract protected function processContent(): bool;
 
-    public function __construct($filePath)
+    public function __construct(string $filePath)
     {
         if (!is_readable($filePath)) {
-            throw new \WebServCo\ICarsoft\Exceptions\ICarsoftException('File path not readable');
+            throw new RuntimeException('File path not readable');
         }
         $this->fileData = file_get_contents($filePath);
         $this->header = [];

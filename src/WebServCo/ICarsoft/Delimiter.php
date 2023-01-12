@@ -3,20 +3,20 @@ namespace WebServCo\ICarsoft;
 
 final class Delimiter
 {
-    const LINE = "\n";
+    public const LINE = "\n";
 
-    const HEADER_SECTION = '========================================================================';
-    const HEADER_DATA = ':';
+    public const HEADER_SECTION = '========================================================================';
+    public const HEADER_DATA = ':';
 
-    const TITLE_SECTION = "\n";
-    const TITLE_DATA = '>';
+    public const TITLE_SECTION = "\n";
+    public const TITLE_DATA = '>';
 
-    const INFO_ITEMS = ',';
-    const INFO_DATA = ':';
+    public const INFO_ITEMS = ',';
+    public const INFO_DATA = ':';
 
-    const CONTENT_DATA = ':';
+    public const CONTENT_DATA = ':';
 
-    const FRAME_SECTION = '- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - '.
-    '- - - - - - - - - - - - - - - - - - - - - - -';
-    const FRAME_DATA = '-----';
+    public const FRAME_SECTION = '- - - - - - - - - - - - - - - - - - - - - - -'.
+    ' - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -';
+    public const FRAME_DATA = '-----';
 }
