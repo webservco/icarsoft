@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace WebServCo\ICarsoft\Processors\Data;
 
+use OutOfBoundsException;
+use UnexpectedValueException;
 use WebServCo\ICarsoft\Delimiter;
-use WebServCo\ICarsoft\Exceptions\ProcessorException;
 use WebServCo\ICarsoft\Processors\AbstractProcessor;
 
 use function array_key_exists;
@@ -25,7 +26,7 @@ final class Processor extends AbstractProcessor
         $bodyParts = explode(Delimiter::FRAME_SECTION, $this->bodyData);
         if (!array_key_exists(1, $bodyParts)) {
             // no frame data
-            throw new ProcessorException('Error processing body section');
+            throw new OutOfBoundsException('Error processing body section');
         }
         $i = 0;
         foreach ($bodyParts as $part) {
@@ -34,7 +35,7 @@ final class Processor extends AbstractProcessor
             } else {
                 $this->frameData[] = $this->filterSectionData($part);
             }
-            $i++;
+            $i += 1;
         }
 
         return true;
@@ -44,7 +45,7 @@ final class Processor extends AbstractProcessor
     {
         // fault, data
         if (!is_array($this->frameData)) {
-                throw new ProcessorException('Error processing frames');
+                throw new UnexpectedValueException('Error processing frames');
         }
         foreach ($this->frameData as $frame) {
             $this->frames[] = $this->processFrame($frame);
