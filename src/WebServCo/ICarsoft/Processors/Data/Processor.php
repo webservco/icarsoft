@@ -76,7 +76,7 @@ final class Processor extends AbstractProcessor
 
             $frame[$key][] = [
                 'value' => $this->filterValue($valueParts[0]),
-                'units' => !empty($valueParts[1]) ? $this->filterValue($valueParts[1]) : null,
+                'units' => array_key_exists(1, $valueParts) ? $this->filterValue($valueParts[1]) : null,
             ];
         }
 

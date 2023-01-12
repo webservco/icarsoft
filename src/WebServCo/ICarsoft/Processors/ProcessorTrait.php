@@ -79,7 +79,7 @@ trait ProcessorTrait
 
     protected function processHeader(): bool
     {
-        if (empty($this->headerData)) {
+        if ($this->headerData === null) {
             throw new UnexpectedValueException('No header data');
         }
 
