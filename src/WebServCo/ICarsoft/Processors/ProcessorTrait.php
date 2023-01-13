@@ -14,6 +14,10 @@ use function explode;
 
 trait ProcessorTrait
 {
+    protected string $fileData;
+
+    protected array $header;
+
     protected ?string $headerData = null;
     protected ?string $bodyData = null;
 
@@ -45,6 +49,7 @@ trait ProcessorTrait
         if ($delimiter === '') {
             throw new InvalidArgumentException('Delimiter is empty.');
         }
+
         return explode($delimiter, $this->filterSectionData($data));
     }
 

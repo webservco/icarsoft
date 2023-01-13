@@ -31,14 +31,10 @@ final class Processor extends AbstractProcessor
             // no frame data
             throw new OutOfBoundsException('Error processing body section');
         }
-        $i = 0;
+        $index = 0;
         foreach ($bodyParts as $part) {
-            if ($i === 0) {
-                $this->titleData = $this->filterSectionData($part);
-            } else {
-                $this->frameData[] = $this->filterSectionData($part);
-            }
-            $i += 1;
+            $this->processBodyPart($index, $part);
+            $index += 1;
         }
 
         return true;
@@ -62,14 +58,14 @@ final class Processor extends AbstractProcessor
             $parts = $this->getSectionParts($line, Delimiter::FRAME_DATA);
 
             $key = $this->filterKey($parts[0]);
-            $value = $parts[1] ?? null;
+            $value = $parts[1] ?? '';
 
             if (mb_strpos($key, 'Frame', 0) === 0) {
                 $keyParts = explode(' ', $key);
                 $key = $keyParts[0];
                 $valueParts = [$keyParts[1]];
             } else {
-                $valueParts = preg_split('/(?<=[0-9.])(?=[^0-9.]+)/i', (string) $value, 2);
+                $valueParts = preg_split('/(?<=[0-9.])(?=[^0-9.]+)/i', $value, 2);
             }
 
             if (!is_array($valueParts)) {
@@ -83,5 +79,17 @@ final class Processor extends AbstractProcessor
         }
 
         return $frame;
+    }
+
+    private function processBodyPart(int $index, string $part): bool
+    {
+        if ($index === 0) {
+            $this->titleData = $this->filterSectionData($part);
+
+            return true;
+        }
+        $this->frameData[] = $this->filterSectionData($part);
+
+        return true;
     }
 }
