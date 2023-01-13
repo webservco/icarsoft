@@ -98,6 +98,9 @@ trait ProcessorTrait
             $infoItems = explode(Delimiter::INFO_ITEMS, $titleLines[1]);
             foreach ($infoItems as $item) {
                 $parts = explode(Delimiter::INFO_DATA, $item);
+                if (!array_key_exists(0, $parts)) {
+                    throw new OutOfBoundsException('Error processing info item');
+                }
                 if (!array_key_exists(1, $parts)) {
                     throw new OutOfBoundsException('Error processing info item');
                 }
