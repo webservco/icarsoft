@@ -26,7 +26,11 @@ abstract class AbstractProcessor
         if (!is_readable($filePath)) {
             throw new RuntimeException('File path not readable');
         }
-        $this->fileData = file_get_contents($filePath);
+        $fileData = file_get_contents($filePath);
+        if ($fileData === false) {
+            throw new RuntimeException('Error loading file data.');
+        }
+        $this->fileData = $fileData;
         $this->header = [];
         $this->title = [];
         $this->info = [];

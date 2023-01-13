@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace WebServCo\ICarsoft\Processors\Info;
 
 use OutOfBoundsException;
+use UnexpectedValueException;
 use WebServCo\ICarsoft\Delimiter;
 use WebServCo\ICarsoft\Processors\AbstractProcessor;
 
@@ -18,6 +19,9 @@ final class Processor extends AbstractProcessor
     */
     protected function processBodyParts(): bool
     {
+        if ($this->bodyData === null) {
+            throw new UnexpectedValueException('bodyData is null.');
+        }
         $bodyParts = explode(Delimiter::TITLE_SECTION, $this->bodyData, 2);
         if (!array_key_exists(1, $bodyParts)) {
             // No data.
@@ -31,6 +35,9 @@ final class Processor extends AbstractProcessor
 
     protected function processContent(): bool
     {
+        if ($this->contentData === null) {
+            throw new UnexpectedValueException('contentData is null.');
+        }
         $lines = $this->getLines($this->contentData);
         foreach ($lines as $line) {
             $parts = $this->getSectionParts($line, Delimiter::INFO_DATA);

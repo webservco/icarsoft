@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace WebServCo\ICarsoft\Processors;
 
+use InvalidArgumentException;
 use OutOfBoundsException;
 use UnexpectedValueException;
 use WebServCo\ICarsoft\Delimiter;
@@ -13,26 +14,16 @@ use function explode;
 
 trait ProcessorTrait
 {
-    protected ?string $fileData = null;
     protected ?string $headerData = null;
     protected ?string $bodyData = null;
 
     protected ?string $titleData = null;
     protected ?string $contentData = null;
 
-    /**
-     * @var array<int,string>
-     */
-    protected array $frameData;
+    protected array $frameData = [];
 
-    /**
-     * @var array<string,string>
-     */
     protected array $title = [];
 
-    /**
-     * @var array<string,string>
-     */
     protected array $info = [];
 
     abstract protected function filterKey(string $data): string;
@@ -43,24 +34,17 @@ trait ProcessorTrait
 
     abstract protected function filterSectionData(string $data): string;
 
-    /**
-     * @return array <int,string>
-     */
     protected function getLines(string $data): array
     {
-        $lines = explode(Delimiter::LINE, $data);
-        if ($lines === []) {
-            throw new OutOfBoundsException('Error processing frame lines');
-        }
-
-        return $lines;
+        return explode(Delimiter::LINE, $data);
     }
 
-    /**
-     * @return array <int,string>
-     */
     protected function getSectionParts(string $data, string $delimiter): array
     {
+        // PHPStan seems enforces non-empty string requirement, even though explode would throw exception anyway.
+        if ($delimiter === '') {
+            throw new InvalidArgumentException('Delimiter is empty.');
+        }
         return explode($delimiter, $this->filterSectionData($data));
     }
 
@@ -84,13 +68,10 @@ trait ProcessorTrait
         }
 
         $lines = explode(Delimiter::LINE, $this->headerData);
-        if ($lines === []) {
-            throw new UnexpectedValueException('Error processing header lines');
-        }
 
         foreach ($lines as $line) {
             $parts = explode(Delimiter::HEADER_DATA, $this->filterSectionData($line));
-            $value = $parts[1] ?? null;
+            $value = $parts[1] ?? '';
             $this->header[$this->filterKey($parts[0])] = $this->filterValue($value);
         }
 
@@ -99,6 +80,9 @@ trait ProcessorTrait
 
     protected function processTitleAndInfo(): bool
     {
+        if ($this->titleData === null) {
+            throw new UnexpectedValueException('titleData is null.');
+        }
         $titleLines = explode(Delimiter::TITLE_SECTION, $this->titleData, 2);
         $titleItems = explode(Delimiter::TITLE_DATA, $titleLines[0]);
         foreach ($titleItems as $k => $v) {

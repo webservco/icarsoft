@@ -23,6 +23,9 @@ final class Processor extends AbstractProcessor
     */
     protected function processBodyParts(): bool
     {
+        if ($this->bodyData === null) {
+            throw new UnexpectedValueException('bodyData is null');
+        }
         $bodyParts = explode(Delimiter::FRAME_SECTION, $this->bodyData);
         if (!array_key_exists(1, $bodyParts)) {
             // no frame data
@@ -44,9 +47,6 @@ final class Processor extends AbstractProcessor
     protected function processContent(): bool
     {
         // fault, data
-        if (!is_array($this->frameData)) {
-                throw new UnexpectedValueException('Error processing frames');
-        }
         foreach ($this->frameData as $frame) {
             $this->frames[] = $this->processFrame($frame);
         }
@@ -54,9 +54,6 @@ final class Processor extends AbstractProcessor
         return true;
     }
 
-    /**
-     * @return array<int|string,array<int,array<string,string|null>>>
-     */
     protected function processFrame(string $data): array
     {
         $frame = [];
@@ -73,6 +70,10 @@ final class Processor extends AbstractProcessor
                 $valueParts = [$keyParts[1]];
             } else {
                 $valueParts = preg_split('/(?<=[0-9.])(?=[^0-9.]+)/i', (string) $value, 2);
+            }
+
+            if (!is_array($valueParts)) {
+                throw new UnexpectedValueException('valueParts is not an array');
             }
 
             $frame[$key][] = [
