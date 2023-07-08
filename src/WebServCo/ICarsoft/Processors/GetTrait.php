@@ -8,9 +8,9 @@ trait GetTrait
 {
     protected array $header;
 
-    protected array $title;
+    protected array $title = [];
 
-    protected array $info;
+    protected array $info = [];
 
     protected array $content;
 
